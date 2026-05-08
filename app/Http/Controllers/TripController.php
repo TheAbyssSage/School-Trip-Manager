@@ -52,9 +52,11 @@ class TripController extends Controller
             'destination' => 'required|string|max:255',
             'date' => 'required|date',
             'price' => 'required|numeric|min:0',
+            'bank_details' => 'nullable|string|max:1000',
+            'description' => 'nullable|string|max:2000',
         ]);
 
-        Trip::create($request->only(['name', 'destination', 'date', 'price']));
+        Trip::create($request->only(['name', 'destination', 'date', 'price', 'bank_details', 'description']));
 
         return redirect()->route('trips.index')->with('success', 'Trip created successfully!');
     }
@@ -71,9 +73,11 @@ class TripController extends Controller
             'destination' => 'required|string|max:255',
             'date' => 'required|date',
             'price' => 'required|numeric|min:0',
+            'bank_details' => 'nullable|string|max:1000',
+            'description' => 'nullable|string|max:2000',
         ]);
 
-        $trip->update($request->only(['name', 'destination', 'date', 'price']));
+        $trip->update($request->only(['name', 'destination', 'date', 'price', 'bank_details', 'description']));
 
         return redirect()->route('trips.index')->with('success', 'Trip updated successfully!');
     }

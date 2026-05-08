@@ -42,6 +42,22 @@
                     @enderror
                 </div>
 
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description (optional)</label>
+                    <textarea id="description" class="form-control @error('description') is-invalid @enderror" name="description" rows="3">{{ old('description', $trip->description) }}</textarea>
+                    @error('description')
+                        <span class="invalid-feedback">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label for="bank_details" class="form-label">Bank / Payment Details (optional)</label>
+                    <textarea id="bank_details" class="form-control @error('bank_details') is-invalid @enderror" name="bank_details" rows="3" placeholder="BE12 3456 7890 1234&#10;Communication: Trip name + student name">{{ old('bank_details', $trip->bank_details) }}</textarea>
+                    @error('bank_details')
+                        <span class="invalid-feedback">{{ $message }}</span>
+                    @enderror
+                </div>
+
                 <button type="submit" class="btn btn-primary">Update Trip</button>
                 <a href="{{ route('trips.index') }}" class="btn btn-outline-secondary">Cancel</a>
             </form>

@@ -17,18 +17,7 @@ Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('regi
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Routes accessible to all authenticated users
-Route::middleware('auth')->group(function () {
-    Route::get('trips', [TripController::class, 'index'])->name('trips.index');
-    Route::get('trips/{trip}', [TripController::class, 'show'])->name('trips.show');
-
-    // Parent routes
-    Route::get('/my-children', [ParentController::class, 'index'])->name('parent.children');
-    Route::post('/my-children/{student}/trip/{trip}/submit-permission', [ParentController::class, 'submitPermission'])
-        ->name('parent.submit-permission');
-});
-
-// Teacher-only routes
+// Teacher-only routes (must come before shared routes to avoid wildcard conflicts)
 Route::middleware(['auth', 'teacher'])->group(function () {
     Route::get('trips/create', [TripController::class, 'create'])->name('trips.create');
     Route::post('trips', [TripController::class, 'store'])->name('trips.store');
@@ -45,4 +34,15 @@ Route::middleware(['auth', 'teacher'])->group(function () {
 
     Route::post('trips/{trip}/students/{student}/notes', [StudentTripController::class, 'updateNotes'])
         ->name('trips.students.notes');
+});
+
+// Routes accessible to all authenticated users
+Route::middleware('auth')->group(function () {
+    Route::get('trips', [TripController::class, 'index'])->name('trips.index');
+    Route::get('trips/{trip}', [TripController::class, 'show'])->name('trips.show');
+
+    // Parent routes
+    Route::get('/my-children', [ParentController::class, 'index'])->name('parent.children');
+    Route::post('/my-children/{student}/trip/{trip}/submit-permission', [ParentController::class, 'submitPermission'])
+        ->name('parent.submit-permission');
 });

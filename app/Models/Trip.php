@@ -11,6 +11,8 @@ class Trip extends Model
         'destination',
         'date',
         'price',
+        'bank_details',
+        'description',
     ];
 
     protected function casts(): array

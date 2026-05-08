@@ -16,6 +16,8 @@ class TripsTableSeeder extends Seeder
             'destination' => 'Bokrijk',
             'date' => now()->addWeeks(3)->format('Y-m-d'),
             'price' => 15.00,
+            'description' => 'We bezoeken het openluchtmuseum in Bokrijk. Leerlingen ontdekken hoe mensen vroeger leefden in Vlaanderen. We vertrekken om 8:30 aan de schoolpoort en zijn terug rond 16:00.',
+            'bank_details' => "Rekening: BE68 1234 5678 9012\nMededeling: Bokrijk + naam leerling\nGelieve te betalen voor 1 juni 2026.",
         ]);
 
         $technopolis = Trip::create([
@@ -23,6 +25,8 @@ class TripsTableSeeder extends Seeder
             'destination' => 'Technopolis',
             'date' => now()->addWeeks(5)->format('Y-m-d'),
             'price' => 22.50,
+            'description' => 'Een hele dag wetenschap en technologie in Technopolis Mechelen! Leerlingen doen hands-on experimenten en workshops. Lunchpakket zelf meebrengen.',
+            'bank_details' => "Rekening: BE68 1234 5678 9012\nMededeling: Technopolis + naam leerling\nGelieve te betalen voor 15 juni 2026.",
         ]);
 
         $pairiDaiza = Trip::create([
@@ -30,6 +34,8 @@ class TripsTableSeeder extends Seeder
             'destination' => 'Pairi Daiza',
             'date' => now()->addWeeks(8)->format('Y-m-d'),
             'price' => 28.00,
+            'description' => 'Bezoek aan Pairi Daiza, een van de mooiste dierentuinen van Europa. We vertrekken vroeg (7:00) en zijn terug rond 18:00. Lunchpakket en drank zelf meebrengen.',
+            'bank_details' => "Rekening: BE68 1234 5678 9012\nMededeling: Pairi Daiza + naam leerling\nGelieve te betalen voor 1 juli 2026.",
         ]);
 
         // Create 15 extra dummy trips
