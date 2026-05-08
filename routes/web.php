@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ParentController;
 use App\Http\Controllers\StudentTripController;
 use App\Http\Controllers\TripController;
 use Illuminate\Support\Facades\Route;
@@ -16,9 +17,24 @@ Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('regi
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Protected routes
+// Routes accessible to all authenticated users
 Route::middleware('auth')->group(function () {
-    Route::resource('trips', TripController::class);
+    Route::get('trips', [TripController::class, 'index'])->name('trips.index');
+    Route::get('trips/{trip}', [TripController::class, 'show'])->name('trips.show');
+
+    // Parent routes
+    Route::get('/my-children', [ParentController::class, 'index'])->name('parent.children');
+    Route::post('/my-children/{student}/trip/{trip}/submit-permission', [ParentController::class, 'submitPermission'])
+        ->name('parent.submit-permission');
+});
+
+// Teacher-only routes
+Route::middleware(['auth', 'teacher'])->group(function () {
+    Route::get('trips/create', [TripController::class, 'create'])->name('trips.create');
+    Route::post('trips', [TripController::class, 'store'])->name('trips.store');
+    Route::get('trips/{trip}/edit', [TripController::class, 'edit'])->name('trips.edit');
+    Route::put('trips/{trip}', [TripController::class, 'update'])->name('trips.update');
+    Route::delete('trips/{trip}', [TripController::class, 'destroy'])->name('trips.destroy');
 
     // Pivot toggle routes
     Route::post('trips/{trip}/students/{student}/toggle-permission', [StudentTripController::class, 'togglePermission'])

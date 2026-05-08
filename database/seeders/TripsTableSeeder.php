@@ -10,7 +10,7 @@ class TripsTableSeeder extends Seeder
 {
     public function run(): void
     {
-        // Create 3 upcoming trips
+        // Create 3 upcoming trips with fixed data
         $bokrijk = Trip::create([
             'name' => 'Bokrijk — Openluchtmuseum',
             'destination' => 'Bokrijk',
@@ -32,7 +32,18 @@ class TripsTableSeeder extends Seeder
             'price' => 28.00,
         ]);
 
-        // Attach students to trips with random permission/paid values
+        // Create 15 extra dummy trips
+        for ($i = 0; $i < 15; $i++) {
+            Trip::create([
+                // Example: "Schooltrip 1 — Educational Visit"
+                'name' => 'Schooltrip ' . ($i + 1) . ' — ' . fake()->sentence(2),
+                'destination' => fake()->city(),                       // Random city name
+                'date' => fake()->dateTimeBetween('+1 week', '+6 months')->format('Y-m-d'),
+                'price' => fake()->randomFloat(2, 10, 40),             // Price between 10 and 40
+            ]);
+        }
+
+        // Attach students to the 3 main trips with random permission/paid values
         $students = Student::all();
 
         foreach ($students as $student) {

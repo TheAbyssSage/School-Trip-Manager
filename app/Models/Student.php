@@ -9,7 +9,13 @@ class Student extends Model
     protected $fillable = [
         'name',
         'class',
+        'parent_id',
     ];
+
+    public function parent()
+    {
+        return $this->belongsTo(User::class, 'parent_id');
+    }
 
     public function trips()
     {
