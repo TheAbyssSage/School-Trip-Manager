@@ -17,14 +17,23 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         @auth
+                            @if(Auth::user()->isTeacher())
+                                <li class="nav-item">
+                                    <a class="nav-link {{ Request::is('trips') ? 'active' : '' }}" href="{{ route('trips.index') }}">Trips</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {{ Request::is('trips/create') ? 'active' : '' }}" href="{{ route('trips.create') }}">New Trip</a>
+                                </li>
+                            @else
+                                <li class="nav-item">
+                                    <a class="nav-link {{ Request::is('trips') ? 'active' : '' }}" href="{{ route('trips.index') }}">Trips</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {{ Request::is('my-children') ? 'active' : '' }}" href="{{ route('parent.children') }}">My Children</a>
+                                </li>
+                            @endif
                             <li class="nav-item">
-                                <a class="nav-link {{ Request::path() === 'trips' ? 'active' : '' }}" href="{{ route('trips.index') }}">Trips</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link {{ Request::path() === 'trips/create' ? 'active' : '' }}" href="{{ route('trips.create') }}">New Trip</a>
-                            </li>
-                            <li class="nav-item">
-                                <span class="nav-link text-light">👋 {{ Auth::user()->name }}</span>
+                                <span class="nav-link text-light">{{ Auth::user()->name }} ({{ ucfirst(Auth::user()->role) }})</span>
                             </li>
                             <li class="nav-item">
                                 <form method="POST" action="{{ route('logout') }}" class="d-inline">
