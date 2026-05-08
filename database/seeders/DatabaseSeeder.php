@@ -41,12 +41,10 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Link parents to students
-        $parent1->students()->sync(
-            \App\Models\Student::whereIn('name', ['Emma Peeters', 'Lucas Janssens', 'Marie Mertens'])->pluck('id')
-        );
+        \App\Models\Student::whereIn('name', ['Emma Peeters', 'Lucas Janssens', 'Marie Mertens'])
+            ->update(['parent_id' => $parent1->id]);
 
-        $parent2->students()->sync(
-            \App\Models\Student::whereIn('name', ['Noah Goossens', 'Julie Wouters', 'Liam De Smet'])->pluck('id')
-        );
+        \App\Models\Student::whereIn('name', ['Noah Goossens', 'Julie Wouters', 'Liam De Smet'])
+            ->update(['parent_id' => $parent2->id]);
     }
 }
