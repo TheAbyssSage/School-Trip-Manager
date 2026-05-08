@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -10,41 +11,55 @@ class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
 
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // Create teacher account
+        // Create teacher accounts
         User::factory()->teacher()->create([
-            'name' => 'Teacher',
+            'name' => 'Mevrouw De Smet',
             'email' => 'teacher@school.be',
             'password' => bcrypt('password'),
         ]);
 
-        // Create parent accounts
-        $parent1 = User::factory()->parent()->create([
-            'name' => 'Parent Peeters',
-            'email' => 'parent@school.be',
+        User::factory()->teacher()->create([
+            'name' => 'Meneer Van Damme',
+            'email' => 'teacher2@school.be',
             'password' => bcrypt('password'),
         ]);
 
-        $parent2 = User::factory()->parent()->create([
-            'name' => 'Parent Janssens',
-            'email' => 'parent2@school.be',
-            'password' => bcrypt('password'),
-        ]);
+        // Create parent accounts
+        $parentNames = [
+            'Peeters', 'Janssens', 'Mertens', 'Willems', 'Claes',
+            'Goossens', 'Wouters', 'De Smet', 'Dubois', 'Lambert',
+            'Dupont', 'Hermans', 'Maes', 'Pauwels', 'Renard',
+            'Segers', 'Timmermans', 'Vandenberghe', 'Verbeke', 'De Smedt',
+            'Van Damme', 'Coppens', 'Seghers', 'De Cock', 'Bauwens',
+            'Michiels', 'De Backer', 'Naessens', 'De Ridder', 'Verstraete',
+            'De Groote', 'De Vos', 'De Winter', 'De Pauw', 'Lemmens',
+            'De Clercq', 'De Meyer', 'De Bruyn', 'De Sutter', 'De Jaeger',
+        ];
+
+        $parents = [];
+        foreach ($parentNames as $i => $name) {
+            $parents[] = User::factory()->parent()->create([
+                'name' => 'Ouder ' . $name,
+                'email' => 'parent' . ($i + 1) . '@school.be',
+                'password' => bcrypt('password'),
+            ]);
+        }
 
         $this->call([
             StudentsTableSeeder::class,
             TripsTableSeeder::class,
         ]);
 
-        // Link parents to students
-        \App\Models\Student::whereIn('name', ['Emma Peeters', 'Lucas Janssens', 'Marie Mertens'])
-            ->update(['parent_id' => $parent1->id]);
+        // Randomly assign each student to a parent
+        $allStudents = Student::all();
+        $parentCount = count($parents);
 
-        \App\Models\Student::whereIn('name', ['Noah Goossens', 'Julie Wouters', 'Liam De Smet'])
-            ->update(['parent_id' => $parent2->id]);
+        foreach ($allStudents as $student) {
+            $student->update([
+                'parent_id' => $parents[array_rand($parents)]->id,
+            ]);
+        }
     }
 }

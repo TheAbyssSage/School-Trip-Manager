@@ -108,10 +108,3 @@ Visit `http://127.0.0.1:8000/admin` for the admin dashboard (same credentials).
 - Permission timestamp tracking
 - Filtering by class on trip detail page
 
-## License
-
-This project is created for educational purposes.
-
----
-
-*(C) SyntraPXL (2026) — "De Nittis Massimo"*
