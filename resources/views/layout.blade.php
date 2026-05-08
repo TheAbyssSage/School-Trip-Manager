@@ -16,12 +16,30 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link {{ Request::path() === 'trips' ? 'active' : '' }}" href="{{ route('trips.index') }}">Trips</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ Request::path() === 'trips/create' ? 'active' : '' }}" href="{{ route('trips.create') }}">New Trip</a>
-                        </li>
+                        @auth
+                            <li class="nav-item">
+                                <a class="nav-link {{ Request::path() === 'trips' ? 'active' : '' }}" href="{{ route('trips.index') }}">Trips</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ Request::path() === 'trips/create' ? 'active' : '' }}" href="{{ route('trips.create') }}">New Trip</a>
+                            </li>
+                            <li class="nav-item">
+                                <span class="nav-link text-light">👋 {{ Auth::user()->name }}</span>
+                            </li>
+                            <li class="nav-item">
+                                <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="btn btn-outline-light btn-sm mt-1">Log Out</button>
+                                </form>
+                            </li>
+                        @else
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('login') }}">Sign In</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('register') }}">Sign Up</a>
+                            </li>
+                        @endauth
                     </ul>
                 </div>
             </div>
