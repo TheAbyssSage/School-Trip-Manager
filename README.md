@@ -90,48 +90,6 @@ Visit `http://127.0.0.1:8000/admin` for the admin dashboard (same credentials).
 ### Example Scenario
 > "Trip to Bokrijk for classes 3A and 3B. The teacher opens the trip detail page and sees at a glance: 15 students, 10 permission given, 8 paid. They can immediately see who hasn't paid yet before sending a reminder."
 
-## Project Structure
-
-```
-app/
-├── Filament/
-│   └── Resources/
-│       ├── TripResource.php
-│       └── StudentResource.php
-├── Http/
-│   └── Controllers/
-│       ├── AuthController.php
-│       ├── StudentTripController.php
-│       └── TripController.php
-├── Models/
-│   ├── Student.php
-│   ├── Trip.php
-│   └── User.php
-└── Providers/
-    └── AppServiceProvider.php
-
-database/
-├── factories/
-│   ├── StudentFactory.php
-│   └── TripFactory.php
-├── migrations/
-└── seeders/
-    ├── DatabaseSeeder.php
-    ├── StudentsTableSeeder.php
-    └── TripsTableSeeder.php
-
-resources/views/
-├── auth/
-│   ├── login.blade.php
-│   └── register.blade.php
-├── trips/
-│   ├── create.blade.php
-│   ├── edit.blade.php
-│   ├── index.blade.php
-│   └── show.blade.php
-└── layout.blade.php
-```
-
 ## Tech Stack
 
 - **Laravel 13** — PHP framework
