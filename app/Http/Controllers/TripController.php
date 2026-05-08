@@ -19,9 +19,19 @@ class TripController extends Controller
 
     public function show(Trip $trip)
     {
-        $trip->load(['students' => function ($query) {
-            $query->orderBy('class')->orderBy('name');
-        }]);
+        $user = auth()->user();
+
+        if ($user->isParent()) {
+            // Parents only see their own children
+            $childIds = $user->students()->pluck('id');
+            $trip->load(['students' => function ($query) use ($childIds) {
+                $query->whereIn('student_id', $childIds)->orderBy('class')->orderBy('name');
+            }]);
+        } else {
+            $trip->load(['students' => function ($query) {
+                $query->orderBy('class')->orderBy('name');
+            }]);
+        }
 
         $totalStudents = $trip->students->count();
         $permissionCount = $trip->students->where('pivot.permission_given', true)->count();
