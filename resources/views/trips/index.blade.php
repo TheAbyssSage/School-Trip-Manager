@@ -4,7 +4,9 @@
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>All School Trips</h1>
-        <a href="{{ route('trips.create') }}" class="btn btn-primary">+ New Trip</a>
+        @if(Auth::user()->isTeacher())
+            <a href="{{ route('trips.create') }}" class="btn btn-primary">+ New Trip</a>
+        @endif
     </div>
 
     <div class="table-responsive">
@@ -48,7 +50,9 @@
                         </td>
                         <td>
                             <a href="{{ route('trips.show', $trip) }}" class="btn btn-sm btn-outline-primary">View</a>
-                            <a href="{{ route('trips.edit', $trip) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                            @if(Auth::user()->isTeacher())
+                                <a href="{{ route('trips.edit', $trip) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                            @endif
                         </td>
                     </tr>
                 @empty

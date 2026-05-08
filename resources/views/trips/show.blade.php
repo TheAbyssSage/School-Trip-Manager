@@ -64,27 +64,43 @@
                         <td>{{ $student->name }}</td>
                         <td>{{ $student->class }}</td>
                         <td>
-                            <form method="POST" action="{{ route('trips.students.toggle-permission', [$trip, $student]) }}" class="d-inline">
-                                @csrf
-                                <button type="submit" class="btn btn-sm btn-{{ $student->pivot->permission_given ? 'success' : 'outline-secondary' }}">
-                                    {{ $student->pivot->permission_given ? 'Yes' : 'No' }}
-                                </button>
-                            </form>
+                            @if(Auth::user()->isTeacher())
+                                <form method="POST" action="{{ route('trips.students.toggle-permission', [$trip, $student]) }}" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-{{ $student->pivot->permission_given ? 'success' : 'outline-secondary' }}">
+                                        {{ $student->pivot->permission_given ? 'Yes' : 'No' }}
+                                    </button>
+                                </form>
+                            @else
+                                <span class="badge bg-{{ $student->pivot->permission_given ? 'success' : 'warning' }}">
+                                    {{ $student->pivot->permission_given ? 'Given' : 'Pending' }}
+                                </span>
+                            @endif
                         </td>
                         <td>
-                            <form method="POST" action="{{ route('trips.students.toggle-paid', [$trip, $student]) }}" class="d-inline">
-                                @csrf
-                                <button type="submit" class="btn btn-sm btn-{{ $student->pivot->paid ? 'success' : 'outline-secondary' }}">
-                                    {{ $student->pivot->paid ? 'Yes' : 'No' }}
-                                </button>
-                            </form>
+                            @if(Auth::user()->isTeacher())
+                                <form method="POST" action="{{ route('trips.students.toggle-paid', [$trip, $student]) }}" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-{{ $student->pivot->paid ? 'success' : 'outline-secondary' }}">
+                                        {{ $student->pivot->paid ? 'Yes' : 'No' }}
+                                    </button>
+                                </form>
+                            @else
+                                <span class="badge bg-{{ $student->pivot->paid ? 'success' : 'danger' }}">
+                                    {{ $student->pivot->paid ? 'Paid' : 'Unpaid' }}
+                                </span>
+                            @endif
                         </td>
                         <td>
-                            <form method="POST" action="{{ route('trips.students.notes', [$trip, $student]) }}" class="d-flex gap-1">
-                                @csrf
-                                <input type="text" name="notes" value="{{ $student->pivot->notes }}" class="form-control form-control-sm" style="min-width: 120px;" placeholder="e.g. allergies">
-                                <button type="submit" class="btn btn-sm btn-outline-primary">Save</button>
-                            </form>
+                            @if(Auth::user()->isTeacher())
+                                <form method="POST" action="{{ route('trips.students.notes', [$trip, $student]) }}" class="d-flex gap-1">
+                                    @csrf
+                                    <input type="text" name="notes" value="{{ $student->pivot->notes }}" class="form-control form-control-sm" style="min-width: 120px;" placeholder="e.g. allergies">
+                                    <button type="submit" class="btn btn-sm btn-outline-primary">Save</button>
+                                </form>
+                            @else
+                                {{ $student->pivot->notes ?: '--' }}
+                            @endif
                         </td>
                     </tr>
                 @empty
