@@ -67,7 +67,7 @@
                             <form method="POST" action="{{ route('trips.students.toggle-permission', [$trip, $student]) }}" class="d-inline">
                                 @csrf
                                 <button type="submit" class="btn btn-sm btn-{{ $student->pivot->permission_given ? 'success' : 'outline-secondary' }}">
-                                    {{ $student->pivot->permission_given ? '✅ Yes' : '❌ No' }}
+                                    {{ $student->pivot->permission_given ? 'Yes' : 'No' }}
                                 </button>
                             </form>
                         </td>
@@ -75,7 +75,7 @@
                             <form method="POST" action="{{ route('trips.students.toggle-paid', [$trip, $student]) }}" class="d-inline">
                                 @csrf
                                 <button type="submit" class="btn btn-sm btn-{{ $student->pivot->paid ? 'success' : 'outline-secondary' }}">
-                                    {{ $student->pivot->paid ? '✅ Yes' : '❌ No' }}
+                                    {{ $student->pivot->paid ? 'Yes' : 'No' }}
                                 </button>
                             </form>
                         </td>

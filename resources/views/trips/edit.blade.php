@@ -2,7 +2,7 @@
 @section('title', 'Edit Trip')
 
 @section('content')
-    <h1>✏️ Edit Trip: {{ $trip->name }}</h1>
+    <h1>Edit Trip: {{ $trip->name }}</h1>
 
     <div class="card">
         <div class="card-body">

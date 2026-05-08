@@ -2,7 +2,7 @@
 @section('title', 'Create Trip')
 
 @section('content')
-    <h1>➕ Create New Trip</h1>
+    <h1>Create New Trip</h1>
 
     <div class="card">
         <div class="card-body">

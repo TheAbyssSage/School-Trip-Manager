@@ -3,7 +3,7 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>📋 All School Trips</h1>
+        <h1>All School Trips</h1>
         <a href="{{ route('trips.create') }}" class="btn btn-primary">+ New Trip</a>
     </div>
 

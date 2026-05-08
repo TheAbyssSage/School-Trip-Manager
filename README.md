@@ -1,8 +1,8 @@
-# 🚌 School Trip Manager
+# School Trip Manager
 
 A Laravel application for managing school trips (uitstappen) in Belgian primary and secondary schools. Teachers can create trips, track which students have permission, and monitor payments — replacing paper forms, cash envelopes, and Excel chaos.
 
-## 📋 Concept
+## Concept
 
 ### Problem
 Teachers manage school trips with paper forms, cash in envelopes, and Excel spreadsheets. Parents forget deadlines, teachers lose overview. This is still super common in Belgian schools, especially smaller ones.
@@ -16,7 +16,7 @@ Teachers manage school trips with paper forms, cash in envelopes, and Excel spre
 - **Teachers (admin)**: Create trips, track who has permission and who has paid
 - **Parents**: Represented implicitly via student records with permission/paid status
 
-## 🚀 Installation
+## Installation
 
 ```bash
 # Clone the repository
@@ -51,7 +51,7 @@ Visit `http://127.0.0.1:8000` in your browser.
 ### Filament Admin Panel
 Visit `http://127.0.0.1:8000/admin` for the admin dashboard (same credentials).
 
-## 📊 Database Structure
+## Database Structure
 
 ### Tables
 
@@ -70,7 +70,7 @@ Visit `http://127.0.0.1:8000/admin` for the admin dashboard (same credentials).
 - **Trip** belongsToMany **Student** (many-to-many)
 - **Student** belongsToMany **Trip** (many-to-many)
 
-## 🎯 Usage
+## Usage
 
 ### Web Interface (Blade + Bootstrap 5)
 
@@ -90,7 +90,7 @@ Visit `http://127.0.0.1:8000/admin` for the admin dashboard (same credentials).
 ### Example Scenario
 > "Trip to Bokrijk for classes 3A and 3B. The teacher opens the trip detail page and sees at a glance: 15 students, 10 permission given, 8 paid. They can immediately see who hasn't paid yet before sending a reminder."
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 app/
@@ -132,7 +132,7 @@ resources/views/
 └── layout.blade.php
 ```
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Laravel 13** — PHP framework
 - **Filament 5** — Admin panel
@@ -141,7 +141,7 @@ resources/views/
 - **Carbon** — Date/time handling
 - **Blade** — Templating engine
 
-## 🔮 Future Improvements
+## Future Improvements
 
 - Multi-school setup with authentication
 - Email reminders for parents
@@ -150,7 +150,7 @@ resources/views/
 - Permission timestamp tracking
 - Filtering by class on trip detail page
 
-## 📝 License
+## License
 
 This project is created for educational purposes.
 
