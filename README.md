@@ -1,58 +1,159 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🚌 School Trip Manager
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel application for managing school trips (uitstappen) in Belgian primary and secondary schools. Teachers can create trips, track which students have permission, and monitor payments — replacing paper forms, cash envelopes, and Excel chaos.
 
-## About Laravel
+## 📋 Concept
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Problem
+Teachers manage school trips with paper forms, cash in envelopes, and Excel spreadsheets. Parents forget deadlines, teachers lose overview. This is still super common in Belgian schools, especially smaller ones.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Why It Matters
+- Every Belgian school does multiple trips per year
+- Paper + cash + WhatsApp chaos is the norm
+- Many schools don't have proper tooling for this
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Users
+- **Teachers (admin)**: Create trips, track who has permission and who has paid
+- **Parents**: Represented implicitly via student records with permission/paid status
 
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## 🚀 Installation
 
 ```bash
-composer require laravel/boost --dev
+# Clone the repository
+git clone <repo-url>
+cd School-Trip-Manager
 
-php artisan boost:install
+# Copy environment file and configure
+cp .env.example .env
+
+# Install dependencies
+composer install
+
+# Generate application key
+php artisan key:generate
+
+# Run migrations and seed the database
+php artisan migrate --seed
+
+# Create storage link (for Filament)
+php artisan storage:link
+
+# Start the development server
+php artisan serve
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Visit `http://127.0.0.1:8000` in your browser.
 
-## Contributing
+### Default Login
+- **Email**: `teacher@school.be`
+- **Password**: `password`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Filament Admin Panel
+Visit `http://127.0.0.1:8000/admin` for the admin dashboard (same credentials).
 
-## Code of Conduct
+## 📊 Database Structure
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Tables
 
-## Security Vulnerabilities
+| Table | Description |
+|-------|-------------|
+| `trips` | School trips (name, destination, date, price) |
+| `students` | Students (name, class) |
+| `student_trip` | Pivot table linking students to trips with status |
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Pivot Fields (`student_trip`)
+- `permission_given` (boolean) — Has the parent given permission?
+- `paid` (boolean) — Has the student paid?
+- `notes` (text, nullable) — e.g. allergies, special needs
 
-## License
+### Relationships
+- **Trip** belongsToMany **Student** (many-to-many)
+- **Student** belongsToMany **Trip** (many-to-many)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 🎯 Usage
+
+### Web Interface (Blade + Bootstrap 5)
+
+1. **Login** at `/login` with `teacher@school.be` / `password`
+2. **View all trips** at `/trips` — see percentages for permission and payment completion
+3. **Create a trip** at `/trips/create`
+4. **View trip details** — see all students with their permission/paid status
+5. **Toggle permission/paid** — click buttons on the trip detail page
+6. **Add notes** — per student per trip (e.g. allergies)
+
+### Filament Admin Panel
+
+1. Visit `/admin` and log in
+2. Manage **Trips** — full CRUD with table view
+3. Manage **Students** — full CRUD with table view
+
+### Example Scenario
+> "Trip to Bokrijk for classes 3A and 3B. The teacher opens the trip detail page and sees at a glance: 15 students, 10 permission given, 8 paid. They can immediately see who hasn't paid yet before sending a reminder."
+
+## 🏗️ Project Structure
+
+```
+app/
+├── Filament/
+│   └── Resources/
+│       ├── TripResource.php
+│       └── StudentResource.php
+├── Http/
+│   └── Controllers/
+│       ├── AuthController.php
+│       ├── StudentTripController.php
+│       └── TripController.php
+├── Models/
+│   ├── Student.php
+│   ├── Trip.php
+│   └── User.php
+└── Providers/
+    └── AppServiceProvider.php
+
+database/
+├── factories/
+│   ├── StudentFactory.php
+│   └── TripFactory.php
+├── migrations/
+└── seeders/
+    ├── DatabaseSeeder.php
+    ├── StudentsTableSeeder.php
+    └── TripsTableSeeder.php
+
+resources/views/
+├── auth/
+│   ├── login.blade.php
+│   └── register.blade.php
+├── trips/
+│   ├── create.blade.php
+│   ├── edit.blade.php
+│   ├── index.blade.php
+│   └── show.blade.php
+└── layout.blade.php
+```
+
+## 🛠️ Tech Stack
+
+- **Laravel 13** — PHP framework
+- **Filament 5** — Admin panel
+- **Bootstrap 5** — Frontend CSS
+- **SQLite** — Database (configurable to MySQL/PostgreSQL)
+- **Carbon** — Date/time handling
+- **Blade** — Templating engine
+
+## 🔮 Future Improvements
+
+- Multi-school setup with authentication
+- Email reminders for parents
+- CSV export for secretariaat
+- Parent login to give consent online
+- Permission timestamp tracking
+- Filtering by class on trip detail page
+
+## 📝 License
+
+This project is created for educational purposes.
+
+---
+
+*(C) SyntraPXL (2026) — "De Nittis Massimo"*
