@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Student;
 use App\Models\Trip;
 use Illuminate\Http\Request;
 
@@ -47,16 +48,7 @@ class TripController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'destination' => 'required|string|max:255',
-            'date' => 'required|date',
-            'price' => 'required|numeric|min:0',
-            'bank_details' => 'nullable|string|max:1000',
-            'description' => 'nullable|string|max:2000',
-        ]);
-
-        Trip::create($request->only(['name', 'destination', 'date', 'price', 'bank_details', 'description']));
+        Trip::create($this->validateTrip($request));
 
         return redirect()->route('trips.index')->with('success', 'Trip created successfully!');
     }
@@ -68,16 +60,7 @@ class TripController extends Controller
 
     public function update(Request $request, Trip $trip)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'destination' => 'required|string|max:255',
-            'date' => 'required|date',
-            'price' => 'required|numeric|min:0',
-            'bank_details' => 'nullable|string|max:1000',
-            'description' => 'nullable|string|max:2000',
-        ]);
-
-        $trip->update($request->only(['name', 'destination', 'date', 'price', 'bank_details', 'description']));
+        $trip->update($this->validateTrip($request));
 
         return redirect()->route('trips.index')->with('success', 'Trip updated successfully!');
     }
@@ -87,5 +70,60 @@ class TripController extends Controller
         $trip->delete();
 
         return redirect()->route('trips.index')->with('success', 'Trip deleted.');
+    }
+
+    public function togglePermission(Trip $trip, Student $student)
+    {
+        $current = $trip->students()
+            ->where('student_id', $student->id)
+            ->first()
+            ->pivot
+            ->permission_given;
+
+        $trip->students()->updateExistingPivot($student->id, [
+            'permission_given' => ! $current,
+        ]);
+
+        return back()->with('success', 'Permission status updated.');
+    }
+
+    public function togglePaid(Trip $trip, Student $student)
+    {
+        $current = $trip->students()
+            ->where('student_id', $student->id)
+            ->first()
+            ->pivot
+            ->paid;
+
+        $trip->students()->updateExistingPivot($student->id, [
+            'paid' => ! $current,
+        ]);
+
+        return back()->with('success', 'Payment status updated.');
+    }
+
+    public function updateNotes(Request $request, Trip $trip, Student $student)
+    {
+        $request->validate([
+            'notes' => 'nullable|string|max:500',
+        ]);
+
+        $trip->students()->updateExistingPivot($student->id, [
+            'notes' => $request->notes,
+        ]);
+
+        return back()->with('success', 'Notes updated.');
+    }
+
+    protected function validateTrip(Request $request): array
+    {
+        return $request->validate([
+            'name' => 'required|string|max:255',
+            'destination' => 'required|string|max:255',
+            'date' => 'required|date',
+            'price' => 'required|numeric|min:0',
+            'bank_details' => 'nullable|string|max:1000',
+            'description' => 'nullable|string|max:2000',
+        ]);
     }
 }
